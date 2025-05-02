@@ -1,12 +1,11 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import pg from 'pg';
-// import session from 'session'
 import session from 'express-session'
 dotenv.config();
 const app = express()
 const PORT = process.env.PORT || 3000;
-// app.use(express.static('public'))
+
 app.use(express.urlencoded({extended:true}))
 
 app.use(session({
@@ -18,7 +17,7 @@ app.use(session({
 const {PGHOST, PGDATABASE, PGUSER, PGPASSWORD} = process.env;
 
 
-const db = new pg.Client({
+const db = new pg.Pool({
     user: PGUSER,
     host: PGHOST,
     database: PGDATABASE,
@@ -28,8 +27,6 @@ const db = new pg.Client({
         require: true,
     }
   });
-  db.connect();
-
 
 
   app.get('/', async (req,res)=>{
